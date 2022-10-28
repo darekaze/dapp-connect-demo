@@ -1,44 +1,32 @@
-import { useAccount, useConnect, useDisconnect, useEnsName, useNetwork } from 'wagmi'
+import { useAccount, useEnsName, useNetwork } from 'wagmi'
+import { Header } from '../components/Header'
 
 export const HomePage = () => {
   const { address, connector, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
   const { chain } = useNetwork()
 
-  const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
-  const { disconnect } = useDisconnect()
-
-  if (isConnected) {
-    return (
-      <div>
-        <div>{ensName ? `${ensName} (${address})` : address}</div>
-        <div>
-          Connected to {chain?.name} using {connector?.name}
-        </div>
-
-        <button className="btn btn-error" onClick={() => disconnect()}>
-          Disconnect
-        </button>
-      </div>
-    )
-  }
-
   return (
-    <div>
-      {connectors.map((connector) => (
-        <button
-          className="btn"
-          disabled={!connector.ready}
-          key={connector.id}
-          onClick={() => connect({ connector })}
-        >
-          {connector.name}
-          {!connector.ready && ' (unsupported)'}
-          {isLoading && connector.id === pendingConnector?.id && ' (connecting)'}
-        </button>
-      ))}
-
-      {error && <div>{error.message}</div>}
-    </div>
+    <>
+      <Header />
+      <div className="h-[calc(100vh-5rem)] flex flex-col items-center justify-center">
+        <div className="text-lg font-sans text-center">
+          {isConnected ? (
+            <div className="flex flex-col gap-4">
+              <div>
+                <div className="font-bold">Address / ENS Name:</div>
+                <div>{ensName ? `${ensName} (${address})` : address}</div>
+              </div>
+              <div>
+                Connected to <span className="text-primary font-bold">{chain?.name}</span> network
+                using <span className="italic">{connector?.name}</span>
+              </div>
+            </div>
+          ) : (
+            <div>Welcome to Connect Wallet Demo, Press 'Connect' to connect your wallet</div>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
