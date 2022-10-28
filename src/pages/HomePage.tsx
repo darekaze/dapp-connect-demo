@@ -15,7 +15,7 @@ export const HomePage = () => {
             <div className="flex flex-col gap-4">
               <div>
                 <div className="font-bold">Address / ENS Name:</div>
-                <div>{ensName ? `${ensName} (${address})` : address}</div>
+                <div className="break-all">{ensName ? `${ensName} (${address})` : address}</div>
               </div>
               <div>
                 Connected to <span className="text-primary font-bold">{chain?.name}</span> network
